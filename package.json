@@ -1,5 +1,5 @@
 {
-  "name": "toureiro",
+  "name": "@lightbeamhealth/toureiro",
   "version": "0.2.13",
   "description": "A graphic interface for bull.",
   "main": "index.js",
@@ -23,6 +23,10 @@
     "url": "https://github.com/LB-CareSignal/Toureiro/issues"
   },
   "homepage": "https://github.com/LB-CareSignal/Toureiro#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "bluebird": "2.10.x",
     "body-parser": "1.17.x",
