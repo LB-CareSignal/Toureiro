@@ -1,0 +1,159 @@
+html,
+body,
+#toureiro-wrapper {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #f3f5f8;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-sidebar {
+  background: #ffffff !important;
+  border-right: 1px solid #d9e0ea;
+  box-shadow: 1px 0 0 rgba(15, 23, 42, 0.04);
+}
+
+.brand-block {
+  padding: 28px 24px 20px;
+}
+
+.brand-block h3,
+.brand-block .ant-typography {
+  margin: 0;
+}
+
+.sidebar-stack {
+  width: 100%;
+  padding: 0 24px 24px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #526070;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.readonly-row,
+.stat-row,
+.toolbar,
+.job-card__header,
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.readonly-row {
+  justify-content: flex-start;
+}
+
+.stats-card {
+  border-color: #d9e0ea;
+}
+
+.stats-card h2 {
+  margin: 0;
+}
+
+.stat-row {
+  padding: 8px 0;
+  border-top: 1px solid #eef2f7;
+}
+
+.app-content {
+  padding: 28px;
+}
+
+.toolbar {
+  margin-bottom: 20px;
+}
+
+.toolbar h2,
+.section-heading h4 {
+  margin: 0;
+}
+
+.error-alert,
+.control-panel,
+.job-section {
+  margin-bottom: 18px;
+}
+
+.control-panel,
+.job-card {
+  border-color: #d9e0ea;
+}
+
+.job-section {
+  padding: 18px;
+  background: #ffffff;
+  border: 1px solid #d9e0ea;
+  border-radius: 8px;
+}
+
+.job-section .ant-list-item {
+  padding: 10px 0;
+  border-block-end: 0;
+}
+
+.job-card {
+  width: 100%;
+}
+
+.job-card__header {
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.job-card__meta {
+  margin-bottom: 12px;
+}
+
+.job-json {
+  max-height: 420px;
+  margin: 0;
+  padding: 14px;
+  overflow: auto;
+  color: #dbeafe;
+  background: #111827;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.jobs-pagination {
+  margin-top: 18px;
+  text-align: right;
+}
+
+@media (max-width: 760px) {
+  .app-content {
+    padding: 18px;
+  }
+
+  .toolbar,
+  .job-card__header,
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .job-section {
+    padding: 14px;
+  }
+}

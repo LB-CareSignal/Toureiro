@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/toureiro.svg)](https://badge.fury.io/js/toureiro)
 [![Build Status](https://travis-ci.org/Epharmix/Toureiro.svg?branch=master)](https://travis-ci.org/Epharmix/Toureiro)
 
-A graphical monitoring interface for the distributed job queue [bull](https://github.com/OptimalBits/bull) built using `express` and `react`. Toureiro provides simple monitoring features as well as the ability to promote delayed jobs directly.
+A graphical monitoring interface for the distributed job queue [bull](https://github.com/OptimalBits/bull) built using `express`, `react`, and Ant Design. Toureiro provides queue visibility as well as the ability to promote, rerun, and remove jobs when readonly mode is disabled.
 
 ## Screenshots
 
@@ -19,29 +19,30 @@ First install `toureiro` from `npm`.
 npm install toureiro
 ```
 
-You can then use `toureiro` in your project. The constructor `toureiro()` will return an `express` app, which you can then have it listen to any port you desire:
+You can then use `toureiro` in your project. The constructor `toureiro()` returns an `express` app, which you can then have it listen to any port you desire:
 
-```javascript
-var toureiro = require('toureiro');
-var app = toureiro();
-var server = app.listen(3000, function() {
+```ts
+import toureiro from 'toureiro';
+
+const app = toureiro();
+const server = app.listen(3000, function() {
   console.log('Toureiro is now listening at port 3000...');
 });
 ```
 
 Or you can mount it to a subpath for your own `express` server:
 
-```javascript
-var express = require('express');
-var toureiro = require('toureiro');
+```ts
+import express from 'express';
+import toureiro from 'toureiro';
 
-var app = express();
+const app = express();
 /**
  * Your own setup...
  */
 app.use('/toureiro', toureiro());
 
-var server = app.listen(8080);
+const server = app.listen(8080);
 ```
 
 You can also run `toureiro` as a standalone program:
@@ -53,23 +54,35 @@ Toureiro is now listening at port 3000...
 
 ## Config
 
-By default, `toureiro` will try to connect to the redis db #0 at 127.0.0.1:6379, but you can configure it yourself:
+By default, `toureiro` will try to connect to Redis db #0 at 127.0.0.1:6379, but you can configure it yourself:
 
-```javascript
-var app = toureiro({
+```ts
+const app = toureiro({
   // Options to be passed directly to redis.createClient(),
   // see https://github.com/NodeRedis/node_redis#rediscreateclient
   redis: {
     // Redis host
     host: '127.0.0.1',
     // Port
-    port: 6379
+    port: 6379,
     // DB number
     db: 1
     // Other redis options...
   }
 });
 ```
+
+The standalone server and CLI also read these environment variables:
+
+```bash
+PORT=3000
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+REDIS_DB=0
+REDIS_PASSWORD=
+```
+
+The app serves static assets from `public`.
 
 ## Usage
 
@@ -87,9 +100,59 @@ Options:
 
 ## Development
 
-`gulp dev`: Starts a test server for port 3000 and redis db #1
+Use a modern Node runtime. This modernization pass has been validated on Node 22 without adding a hard package engine constraint.
 
-`npm test`: Runs the mocha tests
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start Redis locally, then build the UI and run the standalone app:
+
+```bash
+npm run build
+npm start
+```
+
+For local configuration, pass environment variables to `npm start`:
+
+```bash
+PORT=3100 REDIS_DB=7 npm start
+```
+
+Build and typecheck:
+
+```bash
+npm run build
+npm run typecheck
+```
+
+### Testing
+
+The test suite requires a running Redis instance.
+
+Run all backend tests:
+
+```bash
+npm test
+```
+
+Run a targeted test using the standard convention:
+
+```bash
+npm run test -- --target=Config
+npm run test -- --target=rerun
+npm run test -- --target=#fetch
+```
+
+Preview the mocha command without executing tests:
+
+```bash
+npm run test -- --target=Config --dry-run
+```
+
+`npm run build:watch` rebuilds the frontend bundle when TypeScript or CSS files change.
 
 Any issues reporting or pull requests are welcomed!
 
@@ -105,7 +168,7 @@ As awesome as `bull` is, the only thing that is missing is a web monitoring inte
 
 ## Browser Compatibility
 
-It's compatible with all modern browsers. Since the front end relies on `react`, and `react` does support all the way down to IE8, it's possible that IE8 will work as well, though with messy styles.
+It's compatible with modern evergreen browsers supported by the current React and Ant Design stack.
 
 ## License
 
