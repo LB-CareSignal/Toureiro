@@ -121,13 +121,13 @@ router.all('/rerun', async function(req: Request, res: Response) {
         return;
       }
 
-      const jobData = job.toData();
-      const opts = JSON.parse(jobData.opts);
-      if (opts.delay) {
+      const jobData: any = job.toData();
+      const opts: any = typeof jobData.opts === 'string' ? JSON.parse(jobData.opts) : (jobData.opts || {});
+      if (opts && typeof opts === 'object' && opts.delay) {
         delete opts.delay;
       }
 
-      const rerunData = JSON.parse(jobData.data);
+      const rerunData = typeof jobData.data === 'string' ? JSON.parse(jobData.data) : jobData.data;
       const rerunJob = await Job.add(qName, rerunData, opts);
       if (!rerunJob) {
         throw new Error('Failed to rerun job.');
