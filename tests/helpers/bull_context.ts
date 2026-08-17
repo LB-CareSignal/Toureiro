@@ -35,8 +35,7 @@ async function closeQueue(queue: BullQueue): Promise<void> {
 export default function createBullContext(redisOptions: BullContextOptions = {}) {
   const queues: BullQueue[] = [];
   const client = attachAsyncMethods(redis.createClient(redisOptions));
-  const ready = redisOptions.db ? client.selectAsync(redisOptions.db) : Promise.resolve();
-
+  const ready = redisOptions.db !== undefined ? client.selectAsync(redisOptions.db) : Promise.resolve();
   function queueOptions() {
     return {
       redis: {
