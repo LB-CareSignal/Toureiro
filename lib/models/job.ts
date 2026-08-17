@@ -27,6 +27,9 @@ async function add(qName: string, data: unknown, opts?: unknown): Promise<QueueJ
 async function remove(qName: string, id: string | number): Promise<void> {
   const queue = Queue.get(qName);
   const job = await queue.getJob(id);
+  if (!job) {
+    throw new Error('The job does not exist.');
+  }
   await job.remove();
 }
 
