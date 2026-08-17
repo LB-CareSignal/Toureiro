@@ -40,7 +40,7 @@ const state: {
 
 function init(opts: RedisOptions = {}): void {
   state.client = attachAsyncMethods(redis.createClient(opts));
-  if (opts.db) {
+  if (opts.db !== undefined) {
     state.client.selectAsync(opts.db);
   }
   state.options = opts;
