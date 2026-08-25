@@ -1,12 +1,12 @@
-#!/usr/bin/env node
+#!/usr/bin/env tsx
 
 import { spawn } from 'node:child_process';
 import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 const args = process.argv.slice(2);
-let mochaArgs = [];
-let target;
+let mochaArgs: string[] = [];
+let target: string | undefined;
 let dryRun = false;
 
 for (let i = 0; i < args.length; i++) {
@@ -44,7 +44,8 @@ if (!mochaArgs.includes('--exit') && !mochaArgs.includes('--no-exit')) {
   mochaArgs.unshift('--exit');
 }
 
-const testsDir = join(import.meta.dirname, '..', 'tests');
+const projectDir = process.cwd();
+const testsDir = join(projectDir, 'tests');
 const testFiles = readdirSync(testsDir)
   .filter(function(fileName) {
     return /^test_.*\.(js|ts)$/.test(fileName);
@@ -65,18 +66,18 @@ if (dryRun) {
   process.exit(0);
 }
 
-const mochaBin = join(import.meta.dirname, '..', 'node_modules', '.bin', process.platform === 'win32' ? 'mocha.cmd' : 'mocha');
+const mochaBin = join(projectDir, 'node_modules', '.bin', process.platform === 'win32' ? 'mocha.cmd' : 'mocha');
 const child = spawn(mochaBin, commandArgs, {
-  cwd: join(import.meta.dirname, '..'),
+  cwd: projectDir,
   stdio: 'inherit'
 });
 
-child.on('error', function(err) {
+child.on('error', function(err: Error) {
   console.error(err.message);
   process.exit(1);
 });
 
-child.on('exit', function(code, signal) {
+child.on('exit', function(code: number | null, signal: NodeJS.Signals | null) {
   if (signal) {
     console.error('mocha exited with signal ' + signal);
     process.exit(1);

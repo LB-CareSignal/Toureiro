@@ -2,14 +2,33 @@
   "name": "@lightbeamhealth/toureiro",
   "version": "0.2.14",
   "description": "A graphic interface for bull.",
-  "main": "index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/**/*",
+    "public/**/*",
+    "views/templates/**/*",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
   "scripts": {
+    "clean:dist": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "build:backend": "npm run clean:dist && tsc -p tsconfig.build.json",
     "build": "webpack --config webpack.config.mjs --mode production",
     "build:watch": "webpack --config webpack.config.mjs --mode development --watch",
     "dev": "tsx ./src/server.ts",
+    "prepack": "npm run build:backend",
     "start": "tsx ./src/server.ts",
     "typecheck": "tsc --noEmit",
-    "test": "node ./scripts/run-tests.mjs"
+    "test": "tsx ./tests/run-tests.ts"
   },
   "repository": {
     "type": "git",
@@ -68,6 +87,6 @@
     "webpack-cli": "^7.2.2"
   },
   "bin": {
-    "toureiro": "./bin/toureiro.ts"
+    "toureiro": "./dist/bin/toureiro.js"
   }
 }
