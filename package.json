@@ -1,6 +1,6 @@
 {
   "name": "@lightbeamhealth/toureiro",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "A graphic interface for bull.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -51,20 +51,16 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@ant-design/icons": "^6.3.2",
-    "antd": "^6.6.0",
     "body-parser": "^2.3.0",
     "bull": "git+https://github.com/LB-CareSignal/bull.git#v2",
     "connect-slashes": "^1.4.0",
     "express": "^4.22.2",
     "minimist": "^1.2.8",
     "pug": "^3.0.4",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "redis": "2.1.x",
-    "tsx": "^4.23.12"
+    "redis": "2.1.x"
   },
   "devDependencies": {
+    "@ant-design/icons": "^6.3.2",
     "@babel/core": "^8.0.1",
     "@babel/preset-env": "^8.0.2",
     "@babel/preset-react": "^8.0.1",
@@ -80,9 +76,13 @@
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
     "mini-css-extract-plugin": "^2.10.2",
-    "mocha": "^11.8.0",
+    "mocha": "11.3.0",
+    "antd": "^6.6.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "supertest": "^7.2.2",
     "typescript": "^7.0.2",
+    "tsx": "^4.23.12",
     "webpack": "^5.109.2",
     "webpack-cli": "^7.2.2"
   },

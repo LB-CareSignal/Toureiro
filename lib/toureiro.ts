@@ -1,4 +1,5 @@
 import path from 'node:path';
+import fs from 'node:fs';
 import express, { type Express, type Request, type Response } from 'express';
 import bodyParser from 'body-parser';
 import slashes from 'connect-slashes';
@@ -11,6 +12,18 @@ export interface ToureiroConfig {
   redis?: RedisOptions;
 }
 
+function resolveAssetPath(paths: string[]): string {
+  for (const relativePath of paths) {
+    const resolvedPath = path.join(__dirname, relativePath);
+    if (fs.existsSync(resolvedPath)) {
+      return resolvedPath;
+    }
+  }
+
+  // Fallback to the first candidate to preserve previous behavior if assets are unexpectedly missing.
+  return path.join(__dirname, paths[0]);
+}
+
 export default function toureiro(config: ToureiroConfig = {}): Express {
   appRedis.init(config.redis || {});
 
@@ -21,10 +34,19 @@ export default function toureiro(config: ToureiroConfig = {}): Express {
   }));
   app.use(bodyParser.json());
 
-  app.set('views', path.join(__dirname, '../views/templates'));
+  const viewsPath = resolveAssetPath([
+    '../views/templates',
+    '../../views/templates'
+  ]);
+  const staticPath = resolveAssetPath([
+    '../public',
+    '../../public'
+  ]);
+
+  app.set('views', viewsPath);
   app.set('view engine', 'pug');
 
-  app.use('/static', express.static(path.join(__dirname, '../public')));
+  app.use('/static', express.static(staticPath));
 
   app.use(slashes());
 
