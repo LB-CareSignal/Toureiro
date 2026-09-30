@@ -1,4 +1,4 @@
-#!/usr/bin/env tsx
+#!/usr/bin/env node
 
 import minimist from 'minimist';
 import config from '../lib/config';
