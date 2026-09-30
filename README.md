@@ -1,21 +1,21 @@
 # Toureiro
 
-[![npm version](https://badge.fury.io/js/toureiro.svg)](https://badge.fury.io/js/toureiro)
+[![npm version](https://badge.fury.io/js/@lightbeamhealth%2Ftoureiro.svg)](https://www.npmjs.com/package/@lightbeamhealth/toureiro)
 
 A graphical monitoring interface for the distributed job queue [bull](https://github.com/OptimalBits/bull) built using `express`, `react`, and Ant Design. Toureiro provides queue visibility as well as the ability to promote, rerun, and remove jobs when readonly mode is disabled.
 
 ## Get Started
 
-First install `toureiro` from `npm`.
+First install `@lightbeamhealth/toureiro` from `npm`.
 
 ```
-npm install toureiro
+npm install @lightbeamhealth/toureiro
 ```
 
 You can then use `toureiro` in your project. The constructor `toureiro()` returns an `express` app, which you can then have it listen to any port you desire:
 
 ```ts
-import toureiro from 'toureiro';
+import toureiro from '@lightbeamhealth/toureiro';
 
 const app = toureiro();
 const server = app.listen(3000, function() {
@@ -27,7 +27,7 @@ Or you can mount it to a subpath for your own `express` server:
 
 ```ts
 import express from 'express';
-import toureiro from 'toureiro';
+import toureiro from '@lightbeamhealth/toureiro';
 
 const app = express();
 /**
@@ -38,7 +38,7 @@ app.use('/toureiro', toureiro());
 const server = app.listen(8080);
 ```
 
-You can also run `toureiro` as a standalone program:
+You can also run `toureiro` as a standalone program, either installed globally with `npm install -g @lightbeamhealth/toureiro` or on demand with `npx @lightbeamhealth/toureiro`:
 
 ```bash
 > toureiro

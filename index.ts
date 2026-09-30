@@ -1,1 +1,3 @@
-export { default } from './lib/toureiro';
+import toureiro from './lib/toureiro';
+
+export = toureiro;
