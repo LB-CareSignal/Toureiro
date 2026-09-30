@@ -61,7 +61,10 @@ const app = toureiro({
     // Port
     port: 6379,
     // DB number
-    db: 1
+    db: 1,
+    // Password, used for both Toureiro's Redis client and the bull queues
+    // (`password` is accepted as an alias)
+    auth_pass: 'secret'
     // Other redis options...
   }
 });
@@ -131,7 +134,11 @@ npm run typecheck
 
 ### Testing
 
-The test suite requires a running Redis instance.
+The test suite requires a running Redis instance. The Redis auth tests also start their own password-protected `redis-server` and are skipped if none is found; set `REDIS_SERVER` to its path if it is not on your `PATH`:
+
+```bash
+REDIS_SERVER=/path/to/redis-server npm test
+```
 
 Run all backend tests:
 

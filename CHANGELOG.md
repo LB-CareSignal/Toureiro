@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
+## 2.0.1 - 2026-09-30
+
+- Bull queues now authenticate with `auth_pass` (previously ignored by ioredis), so job routes work against a password-protected Redis.
+- Redis and queue errors no longer crash the host process. A wrong or missing password makes requests fail with a clear message instead of hanging.
+- `password` is accepted as an alias for `auth_pass`.
+
 ## 2.0.0 - 2026-09-30
 
 - Added server-enforced readonly mode via the `readonly` option, `--readonly` CLI flag, or `TOUREIRO_READONLY=true`. Remove, promote, and rerun requests are rejected with a 403 and the UI locks to Readonly.

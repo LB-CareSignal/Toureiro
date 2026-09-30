@@ -1,5 +1,5 @@
 import bull from 'bull';
-import appRedis from '../redis';
+import appRedis, { redisPassword } from '../redis';
 
 type QueueInstance = any;
 
@@ -7,14 +7,14 @@ const queueCache = new Map<string, QueueInstance>();
 
 function queueConfig() {
   const redisOpts = appRedis.redisOpts || {};
+  const password = redisPassword(redisOpts);
   return {
     redis: {
       host: redisOpts.host,
       port: redisOpts.port,
       DB: redisOpts.db,
-      opts: {
-        auth_pass: redisOpts.auth_pass
-      }
+      // bull hands these options to ioredis, which reads `password`, not `auth_pass`.
+      opts: password ? { password } : {}
     }
   };
 }
@@ -51,7 +51,14 @@ async function remove(qName: string): Promise<void> {
 
 function get(qName: string): QueueInstance {
   if (!queueCache.has(qName)) {
-    queueCache.set(qName, new bull(qName, queueConfig()));
+    // Fails fast when Redis rejected the password, instead of opening bull connections that would hang.
+    appRedis.client();
+    const queue = new bull(qName, queueConfig());
+    // bull re-emits client errors on the queue; unhandled, they would crash the host process.
+    queue.on('error', function(err: Error) {
+      console.error('Toureiro queue "' + qName + '" error:', err.message);
+    });
+    queueCache.set(qName, queue);
   }
   return queueCache.get(qName);
 }
