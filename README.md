@@ -4,12 +4,6 @@
 
 A graphical monitoring interface for the distributed job queue [bull](https://github.com/OptimalBits/bull) built using `express`, `react`, and Ant Design. Toureiro provides queue visibility as well as the ability to promote, rerun, and remove jobs when readonly mode is disabled.
 
-## Screenshots
-
-![Job List](https://raw.githubusercontent.com/Epharmix/Toureiro/screenshots/public/screenshots/Job%20List.png "Job List")
-
-![Search Job](https://raw.githubusercontent.com/Epharmix/Toureiro/screenshots/public/screenshots/Search%20Job.png "Search Job")
-
 ## Get Started
 
 First install `toureiro` from `npm`.
