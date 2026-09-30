@@ -4,6 +4,7 @@ import toureiro from '../lib/toureiro';
 const runtimeConfig = config.fromEnv(process.env);
 const app = toureiro({
   development: runtimeConfig.development,
+  readonly: runtimeConfig.readonly,
   redis: runtimeConfig.redis
 });
 

@@ -9,8 +9,11 @@ import jobRoutes from './routes/job';
 
 export interface ToureiroConfig {
   development?: boolean;
+  readonly?: boolean;
   redis?: RedisOptions;
 }
+
+const mutationPaths = ['/job/remove', '/job/promote', '/job/rerun'];
 
 function resolveAssetPath(paths: string[]): string {
   for (const relativePath of paths) {
@@ -26,6 +29,7 @@ function resolveAssetPath(paths: string[]): string {
 
 export default function toureiro(config: ToureiroConfig = {}): Express {
   appRedis.init(config.redis || {});
+  const readonly = config.readonly === true;
 
   const app = express();
 
@@ -51,8 +55,18 @@ export default function toureiro(config: ToureiroConfig = {}): Express {
   app.use(slashes());
 
   app.all('/', function(req: Request, res: Response) {
-    res.render('index');
+    res.render('index', { readonly });
   });
+
+  if (readonly) {
+    app.use(mutationPaths, function(req: Request, res: Response) {
+      res.status(403).json({
+        status: 'FAIL',
+        message: 'Toureiro is running in readonly mode.'
+      });
+    });
+  }
+
   app.use('/queue', queueRoutes);
   app.use('/job', jobRoutes);
 

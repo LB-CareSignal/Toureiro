@@ -159,7 +159,11 @@ function JobCard({ job, readonly, queue, onChanged }: JobCardProps): React.React
   );
 }
 
-function ToureiroApp(): React.ReactElement {
+interface ToureiroAppProps {
+  serverReadonly: boolean;
+}
+
+function ToureiroApp({ serverReadonly }: ToureiroAppProps): React.ReactElement {
   const [queues, setQueues] = useState<QueueName[]>([]);
   const [queue, setQueue] = useState<QueueName>();
   const [queueSummary, setQueueSummary] = useState<QueueSummary>();
@@ -173,6 +177,7 @@ function ToureiroApp(): React.ReactElement {
   const [error, setError] = useState<string>();
   const [searchId, setSearchId] = useState('');
   const [searchedJob, setSearchedJob] = useState<SerializedJob | null>();
+  const effectiveReadonly = readonly || serverReadonly;
   const [searching, setSearching] = useState(false);
 
   async function refreshQueues(): Promise<void> {
@@ -297,8 +302,8 @@ function ToureiroApp(): React.ReactElement {
             <div>
               <Text className="field-label">Mode</Text>
               <div className="readonly-row">
-                <Switch checked={readonly} onChange={setReadonly} />
-                <Text>{readonly ? 'Readonly' : 'Mutations enabled'}</Text>
+                <Switch checked={effectiveReadonly} disabled={serverReadonly} onChange={setReadonly} />
+                <Text>{serverReadonly ? 'Readonly (set by server)' : effectiveReadonly ? 'Readonly' : 'Mutations enabled'}</Text>
               </div>
             </div>
             <Card className="stats-card" size="small">
@@ -343,7 +348,7 @@ function ToureiroApp(): React.ReactElement {
           {searchedJob ? (
             <div className="job-section">
               <Title level={4}>Job Details</Title>
-              <JobCard job={searchedJob} onChanged={() => { searchJob(); refreshJobs(); refreshAll(); }} queue={queue as QueueName} readonly={readonly} />
+              <JobCard job={searchedJob} onChanged={() => { searchJob(); refreshJobs(); refreshAll(); }} queue={queue as QueueName} readonly={effectiveReadonly} />
             </div>
           ) : null}
           <div className="job-section">
@@ -357,7 +362,7 @@ function ToureiroApp(): React.ReactElement {
                   dataSource={jobs}
                   renderItem={(job) => (
                     <List.Item>
-                      <JobCard job={job} onChanged={() => { refreshJobs(); refreshAll(); }} queue={queue} readonly={readonly} />
+                      <JobCard job={job} onChanged={() => { refreshJobs(); refreshAll(); }} queue={queue} readonly={effectiveReadonly} />
                     </List.Item>
                   )}
                 />
@@ -383,5 +388,5 @@ function ToureiroApp(): React.ReactElement {
 const mountNode = document.getElementById('toureiro-wrapper');
 
 if (mountNode) {
-  createRoot(mountNode).render(<ToureiroApp />);
+  createRoot(mountNode).render(<ToureiroApp serverReadonly={mountNode.dataset.readonly === 'true'} />);
 }

@@ -14,12 +14,14 @@ if (argv.h || argv.help) {
   console.log('--rp           Redis port, default to 6379');
   console.log('--rdb          Redis database number, default to 0');
   console.log('--pass         Redis password, default to null');
+  console.log('--readonly     Reject job mutations (remove, promote, rerun)');
   process.exit(0);
 }
 
 const runtimeConfig = config.fromArgs(argv, process.env);
 const app = toureiro({
   development: runtimeConfig.development,
+  readonly: runtimeConfig.readonly,
   redis: runtimeConfig.redis
 });
 

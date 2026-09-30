@@ -8,6 +8,7 @@ describe('Config', function() {
 
     assert.equal(result.port, 3000);
     assert.equal(result.development, false);
+    assert.equal(result.readonly, false);
     assert.deepEqual(result.redis, {
       host: '127.0.0.1',
       port: 6379,
@@ -20,6 +21,7 @@ describe('Config', function() {
     const result = config.fromEnv({
       PORT: '4000',
       TOUREIRO_DEV_STATIC: 'true',
+      TOUREIRO_READONLY: 'true',
       REDIS_HOST: 'redis.local',
       REDIS_PORT: '6380',
       REDIS_DB: '3',
@@ -28,6 +30,7 @@ describe('Config', function() {
 
     assert.equal(result.port, 4000);
     assert.equal(result.development, true);
+    assert.equal(result.readonly, true);
     assert.deepEqual(result.redis, {
       host: 'redis.local',
       port: 6380,
@@ -58,6 +61,13 @@ describe('Config', function() {
       db: 4,
       auth_pass: 'cli-secret'
     });
+  });
+
+  it('reads the readonly CLI flag', function() {
+    assert.equal(config.fromArgs({ _: [], readonly: true }, {}).readonly, true);
+    assert.equal(config.fromArgs({ _: [], readonly: 'true' }, {}).readonly, true);
+    assert.equal(config.fromArgs({ _: [], readonly: 'false' }, { TOUREIRO_READONLY: 'true' }).readonly, false);
+    assert.equal(config.fromArgs({ _: [] }, { TOUREIRO_READONLY: 'true' }).readonly, true);
   });
 
 });

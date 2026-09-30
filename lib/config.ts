@@ -8,6 +8,7 @@ export interface RedisConfig {
 export interface RuntimeConfig {
   port: number;
   development: boolean;
+  readonly: boolean;
   redis: RedisConfig;
 }
 
@@ -17,6 +18,7 @@ export interface CliArgs {
   rp?: string | number;
   rdb?: string | number;
   pass?: string;
+  readonly?: boolean | string;
 }
 
 function parseNumber(value: string | number | undefined, fallback: number): number {
@@ -40,6 +42,7 @@ export function fromEnv(env: NodeJS.ProcessEnv = process.env, defaults: Partial<
   return {
     port: parseNumber(env.PORT || env.TOUREIRO_PORT, defaults.port || 3000),
     development: env.TOUREIRO_DEV_STATIC === 'true' || defaults.development === true,
+    readonly: env.TOUREIRO_READONLY === 'true' || defaults.readonly === true,
     redis: redisConfigFromEnv(env, defaults.redis)
   };
 }
@@ -61,6 +64,9 @@ export function fromArgs(argv: CliArgs, env: NodeJS.ProcessEnv = process.env): R
   }
   if (argv.pass) {
     config.redis.auth_pass = argv.pass;
+  }
+  if (argv.readonly !== undefined) {
+    config.readonly = argv.readonly === true || argv.readonly === 'true';
   }
 
   return config;

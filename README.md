@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/@lightbeamhealth%2Ftoureiro.svg)](https://www.npmjs.com/package/@lightbeamhealth/toureiro)
 
-A graphical monitoring interface for the distributed job queue [bull](https://github.com/OptimalBits/bull) built using `express`, `react`, and Ant Design. Toureiro provides queue visibility as well as the ability to promote, rerun, and remove jobs when readonly mode is disabled.
+A graphical monitoring interface for the distributed job queue [bull](https://github.com/OptimalBits/bull) built using `express`, `react`, and Ant Design. Toureiro provides queue visibility as well as the ability to promote, rerun, and remove jobs unless it is running in readonly mode.
 
 ## Get Started
 
@@ -51,6 +51,8 @@ By default, `toureiro` will try to connect to Redis db #0 at 127.0.0.1:6379, but
 
 ```ts
 const app = toureiro({
+  // Reject job mutations (remove, promote, rerun), default to false
+  readonly: false,
   // Options to be passed directly to redis.createClient(),
   // see https://github.com/NodeRedis/node_redis#rediscreateclient
   redis: {
@@ -69,6 +71,7 @@ The standalone server and CLI also read these environment variables:
 
 ```bash
 PORT=3000
+TOUREIRO_READONLY=false
 REDIS_HOST=127.0.0.1
 REDIS_PORT=6379
 REDIS_DB=0
@@ -89,7 +92,12 @@ Options:
 --rp           Redis port, default to 6379
 --rdb          Redis database number, default to 0
 --pass         Redis password, default to null
+--readonly     Reject job mutations (remove, promote, rerun)
 ```
+
+### Readonly Mode
+
+When `readonly` is enabled (via the `readonly` option, `--readonly`, or `TOUREIRO_READONLY=true`), the server rejects remove, promote, and rerun requests with a `403`, and the UI locks its mode switch to Readonly. When it is disabled, the UI still starts in Readonly and mutations must be switched on in the page before the action buttons appear.
 
 ## Development
 
